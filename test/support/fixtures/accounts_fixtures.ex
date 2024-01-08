@@ -14,6 +14,7 @@ defmodule BankApi.AccountsFixtures do
         opening_balance: "120.5",
         balance: "120.5",
         cpf: "some cpf",
+        password: "some password_hash",
         first_name: "some first_name",
         last_name: "some last_name"
       })

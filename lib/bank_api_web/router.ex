@@ -5,12 +5,30 @@ defmodule BankApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug BankApi.Accounts.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   scope "/api", BankApiWeb do
-    pipe_through :api
+    pipe_through [:api, :auth, :ensure_auth]
 
     scope "/v1", V1 do
-      resources "/users", UserController, only: [:create, :show]
-      resources "/transactions", TransactionController, except: [:create, :show]
+      resources "/users", UserController, only: [:show]
+      resources "/transactions", TransactionController, only: [:create, :show]
+      get "/logout", SessionController, :delete
+    end
+  end
+
+  scope "/api", BankApiWeb do
+    pipe_through [:api, :auth]
+
+    scope "/v1", V1 do
+      resources "/users", UserController, only: [:create]
+      post "/login", SessionController, :create
     end
   end
 

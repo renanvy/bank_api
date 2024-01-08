@@ -8,6 +8,10 @@ defmodule BankApiWeb.V1.UserJSON do
     %{data: data(user)}
   end
 
+  def create(%{user: user, token: token}) do
+    %{data: data(user, token)}
+  end
+
   defp data(%User{} = user) do
     %{
       id: user.id,
@@ -16,6 +20,14 @@ defmodule BankApiWeb.V1.UserJSON do
       cpf: user.cpf,
       opening_balance: user.opening_balance,
       balance: user.balance
+    }
+  end
+
+  defp data(%User{} = user, token) do
+    %{
+      id: user.id,
+      cpf: user.cpf,
+      token: token
     }
   end
 end

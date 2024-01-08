@@ -15,7 +15,7 @@ defmodule BankApiWeb.V1.TransactionControllerTest do
 
   describe "create transaction" do
     test "renders transaction when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/v1/transactions", transaction: @create_attrs)
+      conn = post(conn, ~p"/api/v1/transactions", @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, ~p"/api/v1/transactions/#{id}")
@@ -28,7 +28,7 @@ defmodule BankApiWeb.V1.TransactionControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/api/v1/transactions", transaction: @invalid_attrs)
+      conn = post(conn, ~p"/api/v1/transactions", @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end

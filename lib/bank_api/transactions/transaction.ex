@@ -20,6 +20,6 @@ defmodule BankApi.Transactions.Transaction do
   def changeset(transaction, attrs) do
     transaction
     |> cast(attrs, [:amount, :reverted_at, :sender_id, :receiver_id])
-    |> validate_required([:amount, :reverted_at, :sender_id, :receiver_id])
+    |> validate_required([:amount, :sender_id, :receiver_id])
   end
 end

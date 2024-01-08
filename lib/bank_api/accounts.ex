@@ -38,7 +38,7 @@ defmodule BankApi.Accounts do
   """
   def create_user(attrs \\ %{}) do
     %User{}
-    |> User.changeset(attrs)
+    |> User.create_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -56,20 +56,23 @@ defmodule BankApi.Accounts do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> User.update_changeset(attrs)
     |> Repo.update()
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking user changes.
+  def authenticate_user(cpf, plain_text_password) do
+    query = from(u in User, where: u.cpf == ^cpf)
 
-  ## Examples
+    case Repo.one(query) do
+      nil ->
+        {:error, :invalid_credentials}
 
-      iex> change_user(user)
-      %Ecto.Changeset{data: %User{}}
-
-  """
-  def change_user(%User{} = user, attrs \\ %{}) do
-    User.changeset(user, attrs)
+      user ->
+        if Bcrypt.verify_pass(plain_text_password, user.password_hash) do
+          {:ok, user}
+        else
+          {:error, :invalid_credentials}
+        end
+    end
   end
 end

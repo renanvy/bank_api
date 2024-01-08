@@ -6,8 +6,9 @@ defmodule BankApiWeb.V1.TransactionController do
 
   action_fallback BankApiWeb.FallbackController
 
-  def create(conn, %{"transaction" => transaction_params}) do
-    with {:ok, %Transaction{} = transaction} <- Transactions.create_transaction(transaction_params) do
+  def create(conn, transaction_params) do
+    with {:ok, %Transaction{} = transaction} <-
+           Transactions.create_transaction(transaction_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/v1/transactions/#{transaction}")

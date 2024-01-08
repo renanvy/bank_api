@@ -32,6 +32,10 @@ config :phoenix, :json_library, Jason
 
 config :bank_api, :generators, api_prefix: "/api/v1"
 
+config :bank_api, BankApi.Accounts.Guardian,
+  issuer: "bank_api",
+  secret_key: System.fetch_env!("GUARDIAN_SECRET_KEY")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
