@@ -22,4 +22,9 @@ defmodule BankApiWeb.V1.UserController do
     user = Accounts.get_user!(id)
     render(conn, :show, user: user)
   end
+
+  def balance(conn, %{"user_id" => user_id}) do
+    user = Accounts.get_user!(user_id)
+    render(conn, :balance, user: user)
+  end
 end

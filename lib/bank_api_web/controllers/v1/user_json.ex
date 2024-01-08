@@ -5,29 +5,29 @@ defmodule BankApiWeb.V1.UserJSON do
   Renders a single user.
   """
   def show(%{user: user}) do
-    %{data: data(user)}
+    %{
+      data: %{
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        cpf: user.cpf,
+        opening_balance: user.opening_balance,
+        balance: user.balance
+      }
+    }
   end
 
   def create(%{user: user, token: token}) do
-    %{data: data(user, token)}
-  end
-
-  defp data(%User{} = user) do
     %{
-      id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      cpf: user.cpf,
-      opening_balance: user.opening_balance,
-      balance: user.balance
+      data: %{
+        id: user.id,
+        cpf: user.cpf,
+        token: token
+      }
     }
   end
 
-  defp data(%User{} = user, token) do
-    %{
-      id: user.id,
-      cpf: user.cpf,
-      token: token
-    }
+  def balance(%{user: user}) do
+    %{data: %{balance: user.balance}}
   end
 end
