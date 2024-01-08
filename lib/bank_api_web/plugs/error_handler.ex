@@ -1,4 +1,4 @@
-defmodule BankApi.Accounts.ErrorHandler do
+defmodule BankApiWeb.Plugs.AuthErrorHandler do
   import Plug.Conn
 
   @behaviour Guardian.Plug.ErrorHandler
