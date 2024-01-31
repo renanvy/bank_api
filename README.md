@@ -2,6 +2,15 @@
 
 API criada com Elixir e Phoenix para aprimorar os conhecimentos na linguagem.
 
+## Contents
+
+- [Functionalidades](#funcionalidades)
+- [Regras de negócio](#regras-de-negócio)
+- [Documentação da API](#documentação-da-api)
+- [Testando a API em produção](#testando-a-api-em-produção)
+- [Requisitos para rodar o projeto](#requisitos-para-rodar-o-projeto)
+- [Rodando o projeto](#rodando-o-projeto)
+
 ## Funcionalidades:
 
 **Cadastro de contas**
