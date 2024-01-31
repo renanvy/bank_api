@@ -65,6 +65,10 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  config :bank_api, BankApiWeb.Auth.Guardian,
+    issuer: "bank_api",
+    secret_key: System.fetch_env!("GUARDIAN_SECRET_KEY")
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
