@@ -1,24 +1,15 @@
 defmodule BankApi.AccountsFixtures do
-  @moduledoc """
-  This module defines test helpers for creating
-  entities via the `BankApi.Accounts` context.
-  """
-
-  @doc """
-  Generate a user.
-  """
   def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
       |> Enum.into(%{
-        opening_balance: "120.5",
-        balance: "120.5",
-        cpf: "some cpf",
-        password: "some password_hash",
-        first_name: "some first_name",
-        last_name: "some last_name"
+        opening_balance: 100.0,
+        cpf: Faker.Phone.PtBr.phone(),
+        password: "secret123",
+        first_name: Faker.Person.first_name(),
+        last_name: Faker.Person.last_name()
       })
-      |> BankApi.Accounts.create_user()
+      |> BankApi.Accounts.Repository.create_user()
 
     user
   end

@@ -6,18 +6,25 @@ defmodule BankApiWeb.V1.TransactionController do
 
   action_fallback BankApiWeb.FallbackController
 
-  def create(conn, transaction_params) do
-    with {:ok, %Transaction{} = transaction} <-
-           Transactions.create_transaction(transaction_params) do
+  def create(conn, params) do
+    user = Guardian.Plug.current_resource(conn)
+    params = Map.put(params, "sender_id", user.id)
+
+    with {:ok, %Transaction{} = transaction} <- Transactions.process_transaction(params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/v1/transactions/#{transaction}")
-      |> render(:show, transaction: transaction)
+      |> render(:create, transaction: transaction)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    transaction = Transactions.get_transaction!(id)
-    render(conn, :show, transaction: transaction)
+  def revert(conn, %{"transaction_id" => transaction_id}) do
+    user = Guardian.Plug.current_resource(conn)
+
+    with {:ok, transaction} <- Transactions.get_user_transaction(transaction_id, user.id),
+         {:ok, transaction} <- Transactions.revert_transaction(transaction) do
+      conn
+      |> put_status(:ok)
+      |> render(:revert, transaction: transaction)
+    end
   end
 end

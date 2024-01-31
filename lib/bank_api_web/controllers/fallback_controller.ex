@@ -21,4 +21,10 @@ defmodule BankApiWeb.FallbackController do
     |> put_view(html: BankApiWeb.ErrorHTML, json: BankApiWeb.ErrorJSON)
     |> render(:"404")
   end
+
+  def call(conn, {:error, :invalid_credentials}) do
+    conn
+    |> put_status(:unauthorized)
+    |> json(%{error: "Invalid credentials"})
+  end
 end

@@ -32,7 +32,7 @@ config :phoenix, :json_library, Jason
 
 config :bank_api, :generators, api_prefix: "/api/v1"
 
-config :bank_api, BankApi.Accounts.Guardian,
+config :bank_api, BankApiWeb.Auth.Guardian,
   issuer: "bank_api",
   secret_key: System.fetch_env!("GUARDIAN_SECRET_KEY")
 

@@ -1,11 +1,12 @@
 defmodule BankApiWeb.V1.TransactionJSON do
   alias BankApi.Transactions.Transaction
 
-  @doc """
-  Renders a single transaction.
-  """
-  def show(%{transaction: transaction}) do
-    %{data: data(transaction)}
+  def create(%{transaction: transaction}) do
+    data(transaction)
+  end
+
+  def revert(%{transaction: transaction}) do
+    data(transaction)
   end
 
   defp data(%Transaction{} = transaction) do

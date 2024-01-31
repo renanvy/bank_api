@@ -1,33 +1,24 @@
 defmodule BankApiWeb.V1.UserJSON do
-  alias BankApi.Accounts.User
-
-  @doc """
-  Renders a single user.
-  """
-  def show(%{user: user}) do
-    %{
-      data: %{
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        cpf: user.cpf,
-        opening_balance: user.opening_balance,
-        balance: user.balance
-      }
-    }
-  end
-
   def create(%{user: user, token: token}) do
     %{
-      data: %{
-        id: user.id,
-        cpf: user.cpf,
-        token: token
-      }
+      id: user.id,
+      token: token
     }
   end
 
   def balance(%{user: user}) do
-    %{data: %{balance: user.balance}}
+    %{balance: user.balance}
+  end
+
+  def transactions(%{transactions: transactions}) do
+    Enum.map(transactions, fn transaction ->
+      %{
+        id: transaction.id,
+        sender_id: transaction.sender_id,
+        receiver_id: transaction.receiver_id,
+        amount: transaction.amount,
+        reverted_at: transaction.reverted_at
+      }
+    end)
   end
 end

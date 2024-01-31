@@ -1,8 +1,8 @@
-defmodule BankApiWeb.Plugs.AuthPipeline do
+defmodule BankApiWeb.Auth.AccessPipeline do
   use Guardian.Plug.Pipeline,
     otp_app: :bank_api,
-    error_handler: BankApiWeb.Plugs.AuthErrorHandler,
-    module: BankApi.Accounts.Guardian
+    error_handler: BankApiWeb.Auth.ErrorHandler,
+    module: BankApiWeb.Auth.Guardian
 
   # If there is a session token, restrict it to an access token and validate it
   plug Guardian.Plug.VerifySession, claims: %{"typ" => "access"}

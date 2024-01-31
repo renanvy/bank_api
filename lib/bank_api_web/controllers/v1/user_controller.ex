@@ -1,9 +1,15 @@
 defmodule BankApiWeb.V1.UserController do
   use BankApiWeb, :controller
 
-  alias BankApi.Accounts
-  alias BankApi.Accounts.Guardian
-  alias BankApi.Accounts.User
+  alias BankApi.{
+    Accounts,
+    Accounts.User,
+    Transactions
+  }
+
+  alias BankApiWeb.V1.UserParams
+
+  alias BankApiWeb.Auth.Guardian
 
   action_fallback BankApiWeb.FallbackController
 
@@ -13,18 +19,23 @@ defmodule BankApiWeb.V1.UserController do
 
       conn
       |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/v1/users/#{user}")
       |> render(:create, user: user, token: token)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
-    render(conn, :show, user: user)
+  def balance(conn, _params) do
+    user = Guardian.Plug.current_resource(conn)
+    render(conn, :balance, user: user)
   end
 
-  def balance(conn, %{"user_id" => user_id}) do
-    user = Accounts.get_user!(user_id)
-    render(conn, :balance, user: user)
+  def transactions(conn, params) do
+    user = Guardian.Plug.current_resource(conn)
+
+    with {:ok, params} <- UserParams.validate(params) do
+      transactions =
+        Transactions.list_user_transactions(user.id, params[:start_date], params[:end_date])
+
+      render(conn, :transactions, transactions: transactions)
+    end
   end
 end

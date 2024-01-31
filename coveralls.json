@@ -1,0 +1,18 @@
+{
+  "skip_files": [
+    "lib/bank_api.ex",
+    "lib/bank_api/application.ex",
+    "lib/bank_api/repo.ex",
+    "lib/bank_api_web.ex",
+    "lib/bank_api_web/controllers/changeset_json.ex",
+    "lib/bank_api_web/controllers/error_json.ex",
+    "lib/bank_api_web/controllers/fallback_controller.ex",
+    "lib/bank_api_web/endpoint.ex",
+    "lib/bank_api_web/router.ex",
+    "lib/bank_api_web/telemetry.ex",
+    "test/",
+    "lib/bank_api_web/auth/",
+    "lib/bank_api/accounts.ex",
+    "lib/bank_api/transactions.ex"
+  ]
+}

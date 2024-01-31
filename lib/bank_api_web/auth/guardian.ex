@@ -1,4 +1,4 @@
-defmodule BankApi.Accounts.Guardian do
+defmodule BankApiWeb.Auth.Guardian do
   use Guardian, otp_app: :bank_api
 
   alias BankApi.Accounts

@@ -43,7 +43,8 @@ defmodule BankApi.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:guardian, "~> 2.3"}
+      {:guardian, "~> 2.3"},
+      {:faker, "~> 0.17", only: :test},
     ]
   end
 

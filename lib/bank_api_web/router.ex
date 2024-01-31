@@ -6,7 +6,7 @@ defmodule BankApiWeb.Router do
   end
 
   pipeline :auth do
-    plug BankApi.Accounts.Pipeline
+    plug BankApiWeb.Auth.AccessPipeline
   end
 
   pipeline :ensure_auth do
@@ -17,12 +17,12 @@ defmodule BankApiWeb.Router do
     pipe_through [:api, :auth, :ensure_auth]
 
     scope "/v1", V1 do
-      resources "/users", UserController, only: [:show] do
-        get "/balance", UserController, :balance
+      resources "/transactions", TransactionController, only: [:create] do
+        patch "/revert", TransactionController, :revert
       end
 
-      resources "/transactions", TransactionController, only: [:create, :show]
-      get "/logout", SessionController, :delete
+      get "/my-balance", UserController, :balance
+      get "/my-transactions", UserController, :transactions
     end
   end
 
