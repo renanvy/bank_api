@@ -4,7 +4,7 @@ defmodule BankApiWeb.V1.UserControllerTest do
   import BankApi.AccountsFixtures
   import BankApi.TransactionsFixtures
 
-  alias BankApi.{Accounts.User, Repo, Transactions.Transaction}
+  alias BankApi.{Accounts.Schemas.User, Repo, Transactions.Schemas.Transaction}
   alias BankApiWeb.Auth.Guardian
 
   setup %{conn: conn} = context do

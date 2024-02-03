@@ -7,5 +7,5 @@ defmodule BankApi.Accounts do
   defdelegate update_balance(user, amount), to: Repository
   defdelegate credit_balance(receiver, amount), to: Repository
   defdelegate debit_balance(sender, amount), to: Repository
-  def authenticate_user(cpf, password), do: Authenticator.call(cpf, password)
+  defdelegate authenticate_user(cpf, password), to: Authenticator, as: :call
 end

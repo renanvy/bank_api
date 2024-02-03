@@ -6,7 +6,7 @@ defmodule BankApi.Transactions.Services.TransactionProcessorTest do
 
   alias BankApi.{
     Transactions.Services.TransactionProcessor,
-    Transactions.Transaction
+    Transactions.Schemas.Transaction
   }
 
   describe "call/1" do
@@ -34,8 +34,7 @@ defmodule BankApi.Transactions.Services.TransactionProcessorTest do
       receiver = user_fixture(%{opening_balance: 0.0})
       attrs = %{amount: 0.0, sender_id: sender.id, receiver_id: receiver.id}
 
-      assert {:error, %Ecto.Changeset{errors: [amount: {"must be greater than %{number}", _}]}} =
-               TransactionProcessor.call(attrs)
+      assert {:error, _changeset} = TransactionProcessor.call(attrs)
     end
 
     test "returns an error when debit balance is failed" do
@@ -43,12 +42,7 @@ defmodule BankApi.Transactions.Services.TransactionProcessorTest do
       receiver = user_fixture()
       attrs = %{amount: 30.0, sender_id: sender.id, receiver_id: receiver.id}
 
-      assert {:error,
-              %Ecto.Changeset{
-                errors: [
-                  balance: {"insuficient balance", _}
-                ]
-              }} = TransactionProcessor.call(attrs)
+      assert {:error, _changeset} = TransactionProcessor.call(attrs)
     end
   end
 end

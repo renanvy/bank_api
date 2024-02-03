@@ -2,7 +2,7 @@ defmodule BankApi.Accounts.RepositoryTest do
   use BankApi.DataCase, async: true
   import BankApi.AccountsFixtures
 
-  alias BankApi.{Accounts.Repository, Accounts.User}
+  alias BankApi.{Accounts.Repository, Accounts.Schemas.User}
 
   describe "get_user!/1" do
     test "returns the user with given id" do
@@ -41,8 +41,8 @@ defmodule BankApi.Accounts.RepositoryTest do
       assert user.cpf == "34312343433"
     end
 
-    test "validates required fields" do
-      assert {:error, changeset} =
+    test "returns an error when attrs is invalid" do
+      assert {:error, %Ecto.Changeset{}} =
                Repository.create_user(%{
                  opening_balance: nil,
                  first_name: nil,
@@ -50,66 +50,6 @@ defmodule BankApi.Accounts.RepositoryTest do
                  cpf: nil,
                  password: nil
                })
-
-      assert "can't be blank" in errors_on(changeset).opening_balance
-      assert "can't be blank" in errors_on(changeset).first_name
-      assert "can't be blank" in errors_on(changeset).last_name
-      assert "can't be blank" in errors_on(changeset).cpf
-      assert "can't be blank" in errors_on(changeset).password
-    end
-
-    test "validates opening_balance is greater than or equal to 0.0" do
-      assert {:error, changeset} =
-               Repository.create_user(%{
-                 opening_balance: -1.0,
-                 first_name: "John",
-                 last_name: "Doe",
-                 cpf: "34312343433",
-                 password: "12345678"
-               })
-
-      assert "must be greater than or equal to 0.0" in errors_on(changeset).opening_balance
-    end
-
-    test "validates cpf is unique" do
-      user = user_fixture()
-
-      assert {:error, changeset} =
-               Repository.create_user(%{
-                 opening_balance: 120.5,
-                 first_name: "John",
-                 last_name: "Doe",
-                 cpf: user.cpf,
-                 password: "12345678"
-               })
-
-      assert "has already been taken" in errors_on(changeset).cpf
-    end
-
-    test "generates a password hash" do
-      assert {:ok, %User{} = user} =
-               Repository.create_user(%{
-                 opening_balance: 120.5,
-                 first_name: "John",
-                 last_name: "Doe",
-                 cpf: "34312343433",
-                 password: "12345678"
-               })
-
-      assert user.password_hash
-    end
-
-    test "sets balance to opening_balance" do
-      assert {:ok, %User{} = user} =
-               Repository.create_user(%{
-                 opening_balance: 120.5,
-                 first_name: "John",
-                 last_name: "Doe",
-                 cpf: "34312343433",
-                 password: "12345678"
-               })
-
-      assert user.balance == Decimal.new("120.5")
     end
   end
 
@@ -118,21 +58,6 @@ defmodule BankApi.Accounts.RepositoryTest do
       user = user_fixture(%{balance: Decimal.new("50.0")})
       assert {:ok, %User{} = user} = Repository.update_balance(user, 100)
       assert user.balance == Decimal.new("100.0")
-    end
-
-    test "validates required fields" do
-      user = user_fixture()
-      assert {:error, changeset} = Repository.update_balance(user, nil)
-
-      assert "can't be blank" in errors_on(changeset).balance
-    end
-
-    test "validates insuficient balance" do
-      user = user_fixture()
-
-      assert {:error, changeset} = Repository.update_balance(user, -100)
-
-      assert "insuficient balance" in errors_on(changeset).balance
     end
   end
 

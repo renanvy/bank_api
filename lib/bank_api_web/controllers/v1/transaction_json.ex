@@ -1,5 +1,5 @@
 defmodule BankApiWeb.V1.TransactionJSON do
-  alias BankApi.Transactions.Transaction
+  alias BankApi.Transactions.Schemas.Transaction
 
   def create(%{transaction: transaction}) do
     data(transaction)

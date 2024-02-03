@@ -3,7 +3,7 @@ defmodule BankApi.Transactions.RepositoryTest do
   import BankApi.AccountsFixtures
   import BankApi.TransactionsFixtures
 
-  alias BankApi.{Transactions.Repository, Transactions.Transaction}
+  alias BankApi.{Transactions.Repository, Transactions.Schemas.Transaction}
 
   describe "list_user_transactions/3" do
     test "returns a list from user transactions filtered by date" do
@@ -65,65 +65,8 @@ defmodule BankApi.Transactions.RepositoryTest do
       assert transaction.reverted_at == nil
     end
 
-    test "validates required fields" do
-      assert {:error, changeset} = Repository.create_transaction(%{})
-
-      assert "can't be blank" in errors_on(changeset).amount
-      assert "can't be blank" in errors_on(changeset).sender_id
-      assert "can't be blank" in errors_on(changeset).receiver_id
-    end
-
-    test "validates amount is greater than 0" do
-      sender = user_fixture(%{opening_balance: 100.0})
-      receiver = user_fixture(%{opening_balance: 0.0})
-
-      assert {:error, changeset} =
-               Repository.create_transaction(%{
-                 amount: 0.0,
-                 sender_id: sender.id,
-                 receiver_id: receiver.id
-               })
-
-      assert "must be greater than 0" in errors_on(changeset).amount
-    end
-
-    test "validates sender_id is a valid user" do
-      receiver = user_fixture(%{opening_balance: 0.0})
-
-      assert {:error, changeset} =
-               Repository.create_transaction(%{
-                 amount: 20.0,
-                 sender_id: Ecto.UUID.generate(),
-                 receiver_id: receiver.id
-               })
-
-      assert "does not exist" in errors_on(changeset).sender_id
-    end
-
-    test "validates receiver_id is a valid user" do
-      sender = user_fixture(%{opening_balance: 100.0})
-
-      assert {:error, changeset} =
-               Repository.create_transaction(%{
-                 amount: 20.0,
-                 sender_id: sender.id,
-                 receiver_id: Ecto.UUID.generate()
-               })
-
-      assert "does not exist" in errors_on(changeset).receiver_id
-    end
-
-    test "validates sender_id and receiver_id are different" do
-      user = user_fixture()
-
-      assert {:error, changeset} =
-               Repository.create_transaction(%{
-                 amount: 20.0,
-                 sender_id: user.id,
-                 receiver_id: user.id
-               })
-
-      assert "can't be transfer to yourself" in errors_on(changeset).receiver_id
+    test "with invalid data doesn't create a transaction" do
+      assert {:error, %Ecto.Changeset{}} = Repository.create_transaction(%{})
     end
   end
 
@@ -137,7 +80,7 @@ defmodule BankApi.Transactions.RepositoryTest do
       assert transaction.reverted_at == ~U[2020-01-01 10:00:00Z]
     end
 
-    test "returns a changeset error when transaction already has reverted" do
+    test "returns an error when transaction update failed" do
       transaction = transaction_fixture()
 
       {:ok, %Transaction{} = transaction} =

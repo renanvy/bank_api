@@ -1,8 +1,8 @@
-defmodule BankApi.Transactions.Transaction do
+defmodule BankApi.Transactions.Schemas.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias BankApi.Accounts.User
+  alias BankApi.Accounts.Schemas.User
 
   @type t :: %__MODULE__{
           __meta__: Ecto.Schema.Metadata.t(),
@@ -59,7 +59,7 @@ defmodule BankApi.Transactions.Transaction do
     end
   end
 
-  defp validate_if_already_reverted(%Ecto.Changeset{valid?: true} = changeset, transaction) do
+  defp validate_if_already_reverted(changeset, transaction) do
     reverted_at = get_change(changeset, :reverted_at)
 
     if reverted_at && transaction.reverted_at do
@@ -68,6 +68,4 @@ defmodule BankApi.Transactions.Transaction do
       changeset
     end
   end
-
-  defp validate_if_already_reverted(changeset, _), do: changeset
 end

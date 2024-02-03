@@ -4,7 +4,7 @@ defmodule BankApi.Transactions.Services.TransactionProcessor do
   alias BankApi.{
     Accounts,
     Transactions.Repository,
-    Transactions.Transaction
+    Transactions.Schemas.Transaction
   }
 
   @spec call(map()) :: {:ok, Transaction.t()} | {:error, Ecto.Changeset.t()}

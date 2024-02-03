@@ -1,7 +1,7 @@
 defmodule BankApi.Accounts.Repository do
   import Ecto.Query, warn: false
 
-  alias BankApi.{Accounts.User, Repo}
+  alias BankApi.{Accounts.Schemas.User, Repo}
 
   @spec get_user!(binary()) :: User.t() | no_return()
   def get_user!(id), do: Repo.get!(User, id)

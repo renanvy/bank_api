@@ -3,7 +3,7 @@ defmodule BankApiWeb.V1.UserController do
 
   alias BankApi.{
     Accounts,
-    Accounts.User,
+    Accounts.Schemas.User,
     Transactions
   }
 

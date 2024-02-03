@@ -1,7 +1,7 @@
 defmodule BankApi.Accounts.Services.Authenticator do
   import Ecto.Query, warn: false
 
-  alias BankApi.{Accounts.User, Repo}
+  alias BankApi.{Accounts.Schemas.User, Repo}
 
   @spec call(String.t(), String.t()) :: {:ok, User.t()} | {:error, :invalid_credentials}
   def call(cpf, password) do

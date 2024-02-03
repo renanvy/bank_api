@@ -4,7 +4,7 @@ defmodule BankApi.Transactions.Services.TransactionReverser do
   alias BankApi.{
     Accounts,
     Transactions.Repository,
-    Transactions.Transaction
+    Transactions.Schemas.Transaction
   }
 
   @spec call(Transaction.t()) :: {:ok, Transaction.t()} | {:error, Ecto.Changeset.t()}

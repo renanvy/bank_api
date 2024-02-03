@@ -25,3 +25,7 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :bank_api, BankApiWeb.Auth.Guardian,
+  issuer: "bank_api",
+  secret_key: "VK7x3+aCAHtwVlTBXHtb2J9yYJ9+kHjpNF3B6MDBbjFZWFoG06PVZ9PYiiTxk+gm"

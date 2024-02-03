@@ -2,7 +2,7 @@ defmodule BankApi.Transactions.Repository do
   import Ecto.Query, warn: false
 
   alias BankApi.{
-    Transactions.Transaction,
+    Transactions.Schemas.Transaction,
     Repo
   }
 

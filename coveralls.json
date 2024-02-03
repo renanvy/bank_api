@@ -12,7 +12,6 @@
     "lib/bank_api_web/telemetry.ex",
     "test/",
     "lib/bank_api_web/auth/",
-    "lib/bank_api/accounts.ex",
-    "lib/bank_api/transactions.ex"
+    "lib/bank_api/release.ex"
   ]
 }

@@ -1,13 +1,15 @@
 defmodule BankApi.Transactions.Services.TransactionReverserTest do
   use BankApi.DataCase, async: true
   import BankApi.AccountsFixtures
+  import BankApi.TransactionsFixtures
 
   alias BankApi.Accounts.Repository, as: AccountsRepository
 
   alias BankApi.{
+    Transactions.Repository,
     Transactions.Services.TransactionReverser,
     Transactions.Services.TransactionProcessor,
-    Transactions.Transaction
+    Transactions.Schemas.Transaction
   }
 
   describe "call/1" do
@@ -29,18 +31,15 @@ defmodule BankApi.Transactions.Services.TransactionReverserTest do
       assert receiver.balance == Decimal.new("0.0")
     end
 
-    test "returns error when reverse failed" do
-      sender = user_fixture(%{opening_balance: 100.0})
-      receiver = user_fixture(%{opening_balance: 0.0})
+    test "returns an error when reverse failed" do
+      transaction = transaction_fixture()
 
       {:ok, transaction} =
-        TransactionProcessor.call(%{amount: 20.0, sender_id: sender.id, receiver_id: receiver.id})
+        Repository.update_transaction(transaction, %{reverted_at: ~U[2021-01-01 00:00:00Z]})
 
-      {:ok, transaction} = TransactionReverser.call(transaction)
+      assert {:error, %Ecto.Changeset{} = changeset} = TransactionReverser.call(transaction)
 
-      assert {:error,
-              %Ecto.Changeset{errors: [reverted_at: {"transaction already reverted", []}]}} =
-               TransactionReverser.call(transaction)
+      assert "transaction already reverted" in errors_on(changeset).reverted_at
     end
 
     test "returns an error when debit balance is failed" do
@@ -54,12 +53,9 @@ defmodule BankApi.Transactions.Services.TransactionReverserTest do
       {:ok, _transaction_2} =
         TransactionProcessor.call(%{amount: 20.0, sender_id: mary.id, receiver_id: tommy.id})
 
-      assert {:error,
-              %Ecto.Changeset{
-                errors: [
-                  balance: {"insuficient balance", _}
-                ]
-              }} = TransactionReverser.call(transaction_1)
+      assert {:error, %Ecto.Changeset{} = changeset} = TransactionReverser.call(transaction_1)
+
+      assert "insuficient balance" in errors_on(changeset).balance
     end
   end
 end
