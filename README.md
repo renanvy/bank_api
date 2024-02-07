@@ -1,6 +1,6 @@
 # Elixir/Phoenix Bank API
 
-API criada com Elixir e Phoenix para aprimorar os conhecimentos na linguagem.
+Simples API que permite aos usuários transferir dinheiro para outra conta. Esta API é apenas uma demonstração de como usar Elixir e Phoenix.
 
 ## Contents
 
@@ -15,7 +15,7 @@ API criada com Elixir e Phoenix para aprimorar os conhecimentos na linguagem.
 
 **Cadastro de contas**
 
-Neste endpoint, devem ser enviados os dados de uma conta e ela deve ser cadastrada na base de contas, caso os dados de usuário estejam válidos de acordo com a seção Regras de negócio.
+Neste endpoint, devem ser enviados os dados de uma conta e ela deve ser cadastrada na base de dados, caso os dados de usuário estejam válidos.
 
 **Autenticação**
 
